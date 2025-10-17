@@ -20,7 +20,7 @@
 name: Build and deploy ASP.NET Core app to Azure Web App
 
 env:
-  AZURE_WEBAPP_NAME: appwebwilson  # 👈 nombre exacto de tu Web App
+  AZURE_WEBAPP_NAME: appwebwilson-fkbggwa8eabphnf3 # 👈 nombre exacto de tu Web App
   AZURE_WEBAPP_PACKAGE_PATH: '.'                     # ruta del proyecto
   DOTNET_VERSION: '9.0'                              # versión de .NET que estás usando
 
