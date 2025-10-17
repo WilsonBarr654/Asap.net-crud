@@ -20,24 +20,24 @@
 name: Build and deploy ASP.NET Core app to Azure Web App
 
 env:
-  AZURE_WEBAPP_NAME: AppWebwilson # 👈 nombre exacto de tu Web App
-  AZURE_WEBAPP_PACKAGE_PATH: '.'                     # ruta del proyecto
-  DOTNET_VERSION: '9.0'                              # versión de .NET que estás usando
+  AZURE_WEBAPP_NAME: AppWebwilson   # 👈 nombre exacto de tu Web App según msdeploySite del publish profile
+  DOTNET_VERSION: '9.0'             # versión de .NET que estás usando
 
 on:
   push:
-    branches: [ "main" ]                             # ejecuta cuando hagas push a main
-  workflow_dispatch:                                 # permite ejecutarlo manualmente desde GitHub Actions
+    branches: [ "main" ]            # ejecuta cuando hagas push a main
+  workflow_dispatch:                 # permite ejecutarlo manualmente desde GitHub Actions
 
 permissions:
   contents: read
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v4
@@ -52,26 +52,6 @@ jobs:
 
       - name: Publish
         run: dotnet publish -c Release -o ./publish
-
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: .net-app
-          path: ${{env.DOTNET_ROOT}}/myapp
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: 'Production'
-      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-
-    steps:
-      - name: Download artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: .net-app
 
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v2
